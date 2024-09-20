@@ -6,72 +6,60 @@ public class Main {
         JFrame frame = new JFrame("Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(300, 400);
-        frame.setLayout(new GridBagLayout());
+
+        // Create the panel with GridBagLayout
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;  // Fill both horizontal and vertical spaces
+        gbc.insets = new Insets(5, 5, 5, 5); // Set padding between components
+
+        // Create the display field
+        JTextField display1 = new JTextField();
+
+        display1.setEditable(true); // Make the display non-editable
+        gbc.gridwidth = GridBagConstraints.REMAINDER; // Make the display span the entire row
+        gbc.weightx = 1.0; // Let the display expand horizontally
+        gbc.weighty = 0.1; // Allow some vertical expansion
+        panel.add(display1, gbc); // Add the display to the panel
+
+        JTextField display2 = new JTextField();
+
+        display2.setEditable(true); // Make the display non-editable
+        gbc.gridwidth = GridBagConstraints.REMAINDER; // Make the display span the entire row
+        gbc.weightx = 1.0; // Let the display expand horizontally
+        gbc.weighty = 0.1; // Allow some vertical expansion
+        panel.add(display2, gbc); // Add the display to the panel
+       // Define the buttons to be used
+        String[] buttons = {
+                "C", "+/-", "%", "/",
+                "7", "8", "9", "x",
+                "4", "5", "6", "-",
+                "1", "2", "3", "+",
+                "CE", "0", ".", "="
+        };
 
 
-        JTextField textField = new JTextField();
-        textField.setPreferredSize(new Dimension(300, 50));
-        frame.add(textField);
+        gbc.gridwidth = 1;
+        gbc.weightx = 0.25; // Set equal horizontal weight for buttons
+        gbc.weighty = 0.25; // Set equal vertical weight for buttons
+        gbc.gridx = 0; // Start at first column
+        gbc.gridy = 2; // Start from second row (first row is for the display)
 
+        for (int i = 0; i < buttons.length; i++) {
+            JButton button = new JButton(buttons[i]);
+            panel.add(button, gbc); // Add button to the panel
 
+            // Move to the next row after every 4 buttons
+            if ((i + 1) % 4 == 0) {
+                gbc.gridx = 0; // Reset to first column
+                gbc.gridy++; // Move to the next row
+            } else {
+                gbc.gridx++; // Move to the next column
+            }
+        }
 
-
-        JButton button7 = new JButton("7");
-        frame.add(button7);
-
-        JButton button8 = new JButton("8");
-        frame.add(button8);
-
-        JButton button9 = new JButton("9");
-        frame.add(button9);
-
-        JButton buttonMultiply = new JButton("*");
-        frame.add(buttonMultiply);
-
-
-
-        JButton button4 = new JButton("4");
-        frame.add(button4);
-
-        JButton button5 = new JButton("5");
-        frame.add(button5);
-
-        JButton button6 = new JButton("6");
-        frame.add(button6);
-
-        JButton buttonMinus = new JButton("-");
-        frame.add(buttonMinus);
-
-
-
-        JButton button1 = new JButton("1");
-        frame.add(button1);
-
-        JButton button2 = new JButton("2");
-        frame.add(button2);
-
-        JButton button3 = new JButton("3");
-        frame.add(button3);
-
-        JButton buttonPlus = new JButton("+");
-        frame.add(buttonPlus);
-
-
-
-        JButton button0 = new JButton("0");
-        frame.add(button0);
-
-        JButton buttonDivide = new JButton("/");
-        frame.add(buttonDivide);
-
-        JButton buttonEqual = new JButton("=");
-        frame.add(buttonEqual);
-
-        JButton buttonClear = new JButton("AC");
-        frame.add(buttonClear);
-
-
+        // Add panel to the frame
+        frame.add(panel);
         frame.setVisible(true);
     }
-
 }
