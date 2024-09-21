@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Main {
+
+    private static String operator = "";
+    private static double firstOperand = 0;
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
@@ -69,6 +72,52 @@ public class Main {
             }
             panel.add(button, gbc); // Add button to the panel
 
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    String text = button.getText();
+
+                    switch (text) {
+                        case "C":
+                            display2.setText("");
+                            display1.setText("");
+                            operator = "";
+                            firstOperand = 0;
+                            break;
+                        case "=":
+                            display1.setText(display2.getText());
+                            double secondOperand = Double.parseDouble(display2.getText());
+                            double result = calculate(firstOperand, secondOperand, operator);
+                            display1.setText(firstOperand + " " + operator.replace("*", "x") + " " + secondOperand + " =");
+                            display2.setText(String.valueOf(result));
+                            operator = "";
+                            break;
+                        case "+":
+                        case "-":
+                        case "x":
+                        case "/":
+                            display2.setText(display2.getText() + " " + text+" ");
+                            operator = text.replace("x", "*");
+                            firstOperand = Double.parseDouble(display2.getText().split(" ")[0]);
+                            display1.setText(firstOperand + " " + operator.replace("*", "x") + " ");
+                            display2.setText("");
+                            break;
+                        case "+/-":
+                            double value = Double.parseDouble(display2.getText());
+                            display2.setText(String.valueOf(-value));
+                            break;
+                        case "%":
+                            double percentValue = Double.parseDouble(display2.getText());
+                            display2.setText(String.valueOf(percentValue / 100));
+                            break;
+                        default:
+                            display2.setText(display2.getText() + text);
+
+                            break;
+                    }
+                }
+            });
+
             // Move to the next row after every 4 buttons
             if ((i + 1) % 4 == 0) {
                 gbc.gridx = 0; // Reset to first column
@@ -81,5 +130,15 @@ public class Main {
         // Add panel to the frame
         frame.add(panel);
         frame.setVisible(true);
+    }
+
+    private static double calculate(double first, double second, String operator) {
+        return switch (operator) {
+            case "+" -> first + second;
+            case "-" -> first - second;
+            case "*" -> first * second;
+            case "/" -> second != 0 ? first / second : 0; // Handle division by zero
+            default -> 0;
+        };
     }
 }
